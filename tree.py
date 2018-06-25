@@ -42,23 +42,23 @@ class BinarySearchTree:
         插入节点
         :param new_node:数值型数据
         """
-        if value > tree.node:
-            if isinstance(tree.right_node, float):
+        if value > self.node:
+            if isinstance(self.right_node, float):
                 new_node = BinarySearchTree(value)
-                new_node.parent_node = tree
-                tree.right_node = new_node
+                new_node.parent_node = self
+                self.right_node = new_node
                 return
             else:
-                self.insert_node2(value, tree.right_node)
-        elif value < tree.node:
-            if isinstance(tree.left_node, float):
+                self.insert_node2(value, self.right_node)
+        elif value < self.node:
+            if isinstance(self.left_node, float):
                 print('OK')
                 new_node = BinarySearchTree(value)
-                new_node.parent_node = tree
-                tree.left_node = new_node
+                new_node.parent_node = self
+                self.left_node = new_node
                 return
             else:
-                self.insert_node2(value, tree.left_node)
+                self.insert_node2(value, self.left_node)
 
 
 def insert_node(new_node, tree):

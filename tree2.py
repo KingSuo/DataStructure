@@ -110,23 +110,32 @@ def delete_node2(value, tree, trace=[], tree_bak=None):
     :return: 
     """
     if not trace:
-        tree_bak = tree
+        tree_bak = tree     # 利用浅拷贝“顶层复制”性质保存内部节点数据
     for node in tree:
         if value == node:
             print("Find %s in the tree." % value)
             if not tree[node][0] and not tree[node][1]:
-                temp = tree_bak
                 print(trace)
                 for i in range(len(trace) -1):
                     trace_node, j = trace[i]
-                    temp = temp[trace_node][j]
+                    tree_bak = tree_bak[trace_node][j]
                 trace_node, j = trace[-1]
-                temp[trace_node][j] = {}
+                tree_bak[trace_node][j] = {}
             elif not tree[node][0] and tree[node][1]:
-                trace.append(1)
+                print(trace)
+                for i in range(len(trace) - 1):
+                    trace_node, j = trace[i]
+                    tree_bak = tree_bak[trace_node][j]
+                trace_node, j = trace[-1]
+                tree_bak[trace_node][j] = tree[node][1]
                 # tree = tree[node][1]
             elif tree[node][0] and not tree[node][1]:
-                trace.append(2)
+                print(trace)
+                for i in range(len(trace) - 1):
+                    trace_node, j = trace[i]
+                    tree_bak = tree_bak[trace_node][j]
+                trace_node, j = trace[-1]
+                tree_bak[trace_node][j] = tree[node][0]
                 # tree = tree[node][0]
             elif tree[node][0] and tree[node][1]:
                 def restructure(temp_tree):
@@ -156,21 +165,7 @@ def delete_node2(value, tree, trace=[], tree_bak=None):
             else:
                 trace.append((node, 1))
                 delete_node2(value, tree[node][1], trace, tree_bak)
-    print('+++++++++++++++++')
-    print(trace)
-    print('+++++++++++++++++')
-    # if isinstance(trace[-1], int):
-    #     print(trace)
-    #     temp = tree
-    #     print('***************')
-    #     print(temp)
-    #     for i in range(len(trace) - 1):
-    #         trace_node, j = trace[i]
-    #         temp = temp[trace_node][j]
-    #         print(temp)
-    print('$$$$$$$$$$$$$')
     print(tree)
-    print('$$$$$$$$$$$$$')
     return tree
 
 
@@ -225,7 +220,7 @@ t7 = find_node(8, a)
 t8 = find_node(80, a)
 print(t1, t2, t3, t4, t5, t6, t7, t8)
 
-a = delete_node2(87, a)
+a = delete_node2(56, a)
 print(a)
 print_node(a)
-print(a[35][1][39][1][56][1])
+# print(a[35][1][39][1][56][1])

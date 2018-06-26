@@ -102,26 +102,33 @@ def delete_node(value, tree):
     return tree_bak
 
 
-def delete_node2(value, tree, trace=[]):
+def delete_node2(value, tree, trace=[], tree_bak=None):
     """
     删除节点
     :param value: 
     :param tree: 
     :return: 
     """
+    if not trace:
+        tree_bak = tree
     for node in tree:
         if value == node:
             print("Find %s in the tree." % value)
             if not tree[node][0] and not tree[node][1]:
-                print('=================')
-                tree = {}
-                print(tree)
+                temp = tree_bak
+                print(trace)
+                for i in range(len(trace) -1):
+                    trace_node, j = trace[i]
+                    temp = temp[trace_node][j]
+                trace_node, j = trace[-1]
+                temp[trace_node][j] = {}
             elif not tree[node][0] and tree[node][1]:
-                tree = tree[node][1]
+                trace.append(1)
+                # tree = tree[node][1]
             elif tree[node][0] and not tree[node][1]:
-                tree = tree[node][0]
+                trace.append(2)
+                # tree = tree[node][0]
             elif tree[node][0] and tree[node][1]:
-
                 def restructure(temp_tree):
                     tree_list = temp_tree[[i for i in tree.keys()][0]]
                     flag = 0
@@ -135,25 +142,35 @@ def delete_node2(value, tree, trace=[]):
                                 if flag >= 2:
                                     flag = 0
                                     restructure(sub_tree)
-                    return tree
+                    # return tree
                 restructure(tree)
         elif value < node:
             if not tree[node][0]:
                 print("Cannot delete %s because it is not in the tree." % value)
             else:
                 trace.append((node, 0))
-                delete_node2(value, tree[node][0], trace)
+                delete_node2(value, tree[node][0], trace, tree_bak)
         elif value > node:
             if not tree[node][1]:
                 print("Cannot delete %s because it is not in the tree." % value)
             else:
                 trace.append((node, 1))
-                delete_node2(value, tree[node][1], trace)
+                delete_node2(value, tree[node][1], trace, tree_bak)
     print('+++++++++++++++++')
     print(trace)
-    print(type(trace))
     print('+++++++++++++++++')
+    # if isinstance(trace[-1], int):
+    #     print(trace)
+    #     temp = tree
+    #     print('***************')
+    #     print(temp)
+    #     for i in range(len(trace) - 1):
+    #         trace_node, j = trace[i]
+    #         temp = temp[trace_node][j]
+    #         print(temp)
+    print('$$$$$$$$$$$$$')
     print(tree)
+    print('$$$$$$$$$$$$$')
     return tree
 
 
@@ -211,3 +228,4 @@ print(t1, t2, t3, t4, t5, t6, t7, t8)
 a = delete_node2(87, a)
 print(a)
 print_node(a)
+print(a[35][1][39][1][56][1])

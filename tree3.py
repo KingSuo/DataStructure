@@ -1,22 +1,52 @@
 import numpy as np
 
 
-def insert_node(node_list, tree={}):
-    try:
-        node_list = sorted(node_list)
-    except TypeError as e:
-        node_list = [node_list]
-        print(e)
-    if len(node_list) == 0:
+class BinarySearchTree:
+    def __init__(self, node_list):
+        self.No_of_nodes = len(node_list)
+        self.node_list = list(node_list)
+        self.tree = self._insert_node(node_list)
+
+    def _insert_node(self, node_list):
+        tree = {}
+        try:
+            node_list = sorted(node_list)
+        except TypeError as e:
+            node_list = [node_list]
+            print(e)
+        if len(node_list) == 0:
+            return tree
+        mapping_list = np.arange(len(node_list))
+        node_index = (mapping_list[0] + mapping_list[-1] + 1) // 2
+        node_value = node_list[node_index]
+        tree[node_value] = [{}, {}]
+        slice_list = [slice(0, node_index), slice(node_index + 1, mapping_list[-1] + 1)]
+        for j in range(2):
+            tree[node_value][j] = self._insert_node(node_list[slice_list[j]])
         return tree
-    mapping_list = np.arange(len(node_list))
-    node_index = (mapping_list[0] + mapping_list[-1] + 1) // 2
-    node_value = node_list[node_index]
-    tree[node_value] = [{}, {}]
-    slice_list = [slice(0, node_index), slice(node_index + 1, mapping_list[-1] + 1)]
-    for j in range(2):
-        tree[node_value][j] = insert_node(node_list[slice_list[j]], {})
-    return tree
+
+    def insert_node(self, node_list, flag=0):
+        tree = {}
+        if not flag:
+            node_list = self.node_list + node_list
+            self.node_list = node_list
+        try:
+            node_list = sorted(node_list)
+        except TypeError as e:
+            node_list = [node_list]
+            print(e)
+        if len(node_list) == 0:
+            return tree
+        mapping_list = np.arange(len(node_list))
+        node_index = (mapping_list[0] + mapping_list[-1] + 1) // 2
+        node_value = node_list[node_index]
+        tree[node_value] = [{}, {}]
+        slice_list = [slice(0, node_index), slice(node_index + 1, mapping_list[-1] + 1)]
+        for j in range(2):
+            tree[node_value][j] = self.insert_node(node_list[slice_list[j]], 1)
+        self.tree = tree
+
+        return tree
 
 
 def find_node(value, tree):
@@ -156,33 +186,7 @@ def print_node(tree):
 
 
 if __name__ == '__main__':
-    a = insert_node(35)
-    insert_node(17, a)
-    insert_node(39, a)
-    insert_node(16, a)
-    insert_node(56, a)
-    insert_node(87, a)
-    insert_node(28, a)
-    insert_node(36, a)
-    insert_node(40, a)
-    print(a)
-    print_node(a)
-    t1 = find_node(35, a)
-    t2 = find_node(56, a)
-    t3 = find_node(39, a)
-    t4 = find_node(16, a)
-    t5 = find_node(87, a)
-    t6 = find_node(28, a)
-    t7 = find_node(8, a)
-    t8 = find_node(80, a)
-    print(t1, t2, t3, t4, t5, t6, t7, t8)
-
-    a = delete_node(35, a, merge_to="left")
-    print(a)
-    print_node(a)
-    # a = delete_node(87, a, merge_to="left")
-    # print(a)
-    # print_node(a)
-    # a = delete_node(35, a, merge_to="left")
-    # print(a)
-    # print_node(a)
+    a = np.arange(12)
+    b = BinarySearchTree(a)
+    c = b.insert_node([23, 45, 453, 23])
+    print_node(b.tree)

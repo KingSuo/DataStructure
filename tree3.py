@@ -1,7 +1,19 @@
 import numpy as np
+import time
+
+
+def run_time(fun):
+    def inner(*args):
+        start_time = time.time()
+        ref = fun(*args)
+        end_time = time.time()
+        print("%s() running time is :%s" % (fun.__name__, end_time - start_time))
+        return ref
+    return inner
 
 
 class BinarySearchTree:
+    @run_time
     def __init__(self, node_list):
         # self.No_of_nodes = len(node_list)
         self.node_list = list(node_list)
@@ -48,6 +60,7 @@ class BinarySearchTree:
 
         return tree
 
+    @run_time
     def is_exist(self, node):
         if node in self.node_list:
             print("Find the node %s in the tree!" % node)
@@ -56,6 +69,7 @@ class BinarySearchTree:
             print("Cannot find the node %s in the tree!" % node)
             return 0
 
+    @run_time
     def delete_node(self, node_list):
         if isinstance(node_list, (tuple, list, dict, set)) and len(node_list) > 0:
             pass
@@ -69,6 +83,7 @@ class BinarySearchTree:
         self.tree = self._insert_node(self.node_list)
         return self.tree
 
+    @run_time
     def change_node(self, old_node_list, new_node_list):
         if isinstance(old_node_list, (tuple, list, dict, set)) and isinstance(new_node_list, (tuple, list, dict, set)):
             if len(old_node_list) == len(new_node_list) and len(old_node_list) > 0:
@@ -93,13 +108,21 @@ class BinarySearchTree:
         return self.tree
 
 
+@run_time
+def test():
+    np.arange(1000000)
+    print("ok")
+    return 0
+
+
 if __name__ == '__main__':
-    a = np.arange(120)
+    test()
+    a = np.arange(100000)
     b = BinarySearchTree(a)
     print("======function insert_node() test=========")
     c = b.insert_node([-23, 45, 453, 232])
     print("b.node_list:", b.node_list)
-    print("b.tree: ", b.tree)
+    # print("b.tree: ", b.tree)
 
     print("======functions is_exist() and delete_node() test=======")
     b.is_exist(-1213)
@@ -110,7 +133,7 @@ if __name__ == '__main__':
     b.is_exist(12)
     b.is_exist(46)
     b.is_exist(100)
-    print("b.tree: ", b.tree)
+    # print("b.tree: ", b.tree)
 
     print("=======function change_node() test=======")
     b.is_exist(2)
@@ -129,7 +152,7 @@ if __name__ == '__main__':
     print('----------------------------------')
 
     b.change_node([2, 4, 10, 11, 12, 17], [-2, -4, -10, -11, -12, -17])
-    print("b.tree: ", b.tree)
+    # print("b.tree: ", b.tree)
 
     b.is_exist(2)
     b.is_exist(4)
